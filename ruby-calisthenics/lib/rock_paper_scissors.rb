@@ -16,5 +16,8 @@ class RockPaperScissors
   end
 
   def self.tournament_winner(tournament)
+    return winner(tournament[0], tournament[1]) if tournament[0][0].is_a? String
+    sub_tournament = tournament.map {  |t| tournament_winner t  }
+    tournament_winner sub_tournament
   end
 end

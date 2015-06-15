@@ -8,11 +8,16 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all_ratings
+    # If parameters are empty then redirect to a RESTful route with values inserted from session
+    if !params.has_key? :ratings
+      flash.keep
+      redirect_to movies_path(ratings: session[:ratings], sort_by: session[:sort_by])
+    end
     session[:ratings] = params[:ratings].keys unless params[:ratings].nil? || params[:ratings] == session[:ratings]
     session[:ratings] ||= @all_ratings 
     @movies = Movie.where(rating: session[:ratings])
     @movies = @movies.order(params[:sort_by]) unless params[:sort_by].nil?
-    @sort_by = params[:sort_by]
+    session[:sort_by] = params[:sort_by]
   end
 
   def new
@@ -42,5 +47,4 @@ class MoviesController < ApplicationController
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
-
 end

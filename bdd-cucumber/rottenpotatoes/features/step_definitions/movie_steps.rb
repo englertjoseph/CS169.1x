@@ -32,7 +32,20 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   end
 end
 
+Then /I should (not )?see movies with the following ratings: (.*)/ do |should_not, rating_list|
+ rating_list.split(/,\s*/).each do |rating|
+   # Uses a regex below to match only the rating (prevents 'G' matching 'PG')
+   if should_not
+     assert page.has_no_xpath?(".//*[@id='movies']/tbody/tr/td", :text => /^#{rating}$/)
+   else
+     assert page.has_xpath?(".//*[@id='movies']/tbody/tr/td", :text => /^#{rating}$/)
+   end
+ end
+end
+
+
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  flunk "Unimplemented"
+  movie_rows = page.all('table#movies tr').count - 1 # Do not include the labels
+  movie_rows.should == 10
 end

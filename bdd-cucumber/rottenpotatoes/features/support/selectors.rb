@@ -15,7 +15,8 @@ module HtmlSelectorsHelpers
 
     when "the page"
       "html > body"
-
+    when "the rating"
+      "tr > td:nth-child(2)"
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

@@ -33,7 +33,6 @@ Scenario: restrict to movies with 'PG' or 'R' ratings
   And I press "ratings_submit"
   # enter step(s) to ensure that PG and R movies are visible
   Then I should see movies with the following ratings: PG, R
-  Then show me the page
   # enter step(s) to ensure that other movies are not visible
   Then I should not see movies with the following ratings: G, PG-13, NC-17
 Scenario: all ratings selected

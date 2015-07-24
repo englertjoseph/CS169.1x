@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index
+    flash[:notice] = "'#{params[:movie_directed]}' has no director info" if params[:no_director]
     sort = params[:sort] || session[:sort]
     case sort
     when 'title'
@@ -16,11 +17,11 @@ class MoviesController < ApplicationController
     end
     @all_ratings = Movie.all_ratings
     @selected_ratings = params[:ratings] || session[:ratings] || {}
-    
+
     if @selected_ratings == {}
       @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
     end
-    
+
     if params[:sort] != session[:sort]
       session[:sort] = sort
       flash.keep
@@ -62,6 +63,15 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+
+  def same_director
+    @director = Movie.find_by_id(params[:id]).director
+    if @director.empty?
+      movie = Movie.find_by_id(params[:id]).title
+      redirect_to movies_path(no_director: true, movie_directed: movie)
+    end
+    @movies = Movie.find_all_by_director(@director)
   end
 
 end

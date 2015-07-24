@@ -1,0 +1,6 @@
+%h1
+  ="Movies directed by #{@director}"
+
+- @movies.each do |movie|
+  %li
+    =movie.title
